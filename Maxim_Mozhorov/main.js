@@ -1,34 +1,37 @@
-function Burger() {
+function Order() {
+    this.price = 0;
+    this.kcal = 0;
 }
 
-Burger.prototype.Add = function (component) {
-    switch (component) {
-        case 'cheese':
-            this.price += 10;
-            this.kcal += 20;
-            break;
-        case 'salad':
-            this.price += 20;
-            this.kcal += 5;
-            break;
-        case 'potato':
-            this.price += 15;
-            this.kcal += 10;
-    }
+Order.prototype.AddSmallBurger = function (){
+    this.price +=50;
+    this.kcal +=20;
+};
+
+Order.prototype.AddBigBurger = function (){
+    this.price +=100;
+    this.kcal +=40;
+};
+
+Order.prototype.AddCesar = function (){
+    this.price +=100;
+    this.kcal +=20;
+};
+
+Order.prototype.AddOlive = function (){
+    this.price +=50;
+    this.kcal +=80;
+};
+
+Order.prototype.AddCola = function () {
+    this.price += 50;
+    this.kcal += 40;
 }
 
-function BigBurger() {
-    this.price = 100;
-    this.kcal = 40;
+Order.prototype.AddCoffee = function () {
+    this.price += 80;
+    this.kcal += 20;
 }
 
-function SmallBurger() {
-    this.price = 50;
-    this.kcal = 20;
-}
 
-BigBurger.prototype = new Burger();
-SmallBurger.prototype = new Burger();
-
-
-var Order = new SmallBurger();
+var my = new Order();
