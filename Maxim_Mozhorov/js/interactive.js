@@ -53,3 +53,20 @@ $( ".order-list ul" ).on("click","li .glyphicon-trash", function(event) {
     });
     $(".total-price").html("Итого: "+MyOrder.price + " ("+MyOrder.kcal+" kcal)");
 });
+
+
+$('button').click(function () {
+   $(".order-list").css("display","block");
+});
+
+$('.order-list .btn-info').click(function () {
+    $("button").each(function (i,elem) {
+        $(this).prop("disabled", true);
+    });
+    $("input[type=radio]").each(function (i,elem) {
+        $(this).prop("disabled", true);
+    });
+
+
+    $(".order-list").append("<p>Ваш заказ успешно оформлен, мы свяжемся с вами в ближайшее время. Для создания нового заказа перезагрузите страницу</p>");
+});
