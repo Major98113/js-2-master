@@ -32,7 +32,7 @@ Order.prototype.AddBurger = function (size, stuffing) {
             this.price += 20;
             this.kcal += 5;
             break;
-        case "potate":
+        case "potato":
             this.price += 15;
             this.kcal += 10;
             break;
@@ -80,20 +80,69 @@ Order.prototype.AddDrink = function (type) {
 };
 
 
-Order.prototype.getOrderList = function () {
-    console.log("Your price list "+this.price+" tubrics");
-    console.log("Your calories "+this.kcal+" kcal");
-    console.log('Your list of order:');
-    console.log(this.items);
+
+Order.prototype.getInfoItem = function (id) {
+    var item = MyOrder.items[id];
+    var price_item = 0;
+    var kcal_item = 0;
+    if (item.name == "Burger"){
+        if (item.size == "small"){
+            price_item += 50;
+            kcal_item += 20;
+        }
+        else if (item.size == "big") {
+            price_item += 100;
+            kcal_item += 40;
+        }
+        if (item.stuffing != ""){
+            if (item.stuffing == "cheese"){
+                price_item += 10;
+                kcal_item += 20;
+            }
+            else if (item.stuffing == "salad"){
+                price_item += 20;
+                kcal_item += 5;
+            }
+            else if (item.stuffing == "potato"){
+                price_item += 15;
+                kcal_item += 10;
+            }
+        }
+    }
+    else if (item.name == "Salad"){
+        if (item.type == "cesar"){
+            price_item += 100;
+            kcal_item += 20;
+        }
+        else if (item.type == "olive") {
+            price_item += 50;
+            kcal_item += 80;
+        }
+    }
+    else if (item.name == "Drink"){
+        if (item.type == "cola"){
+            price_item += 50;
+            kcal_item += 40;
+        }
+        else if (item.type == "coffee") {
+            price_item += 80;
+            kcal_item += 20;
+        }
+    }
+
+    return [price_item,kcal_item];
 };
 
-Order.prototype.getPrice = function () {
-    return "Your price list "+this.price+" tubrics";
+
+
+Order.prototype.deleteFood = function (id) {
+    debugger;
+    var info_item = MyOrder.getInfoItem(id);
+    MyOrder.price -= info_item[0];
+    MyOrder.kcal -= info_item[1];
+    MyOrder.items.splice(id,1);
 };
 
-Order.prototype.getCalories = function () {
-    return "Your calories "+this.kcal+" kcal";
-};
 
 
 
