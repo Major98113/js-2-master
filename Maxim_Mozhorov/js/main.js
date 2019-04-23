@@ -136,7 +136,6 @@ Order.prototype.getInfoItem = function (id) {
 
 
 Order.prototype.deleteFood = function (id) {
-    debugger;
     var info_item = MyOrder.getInfoItem(id);
     MyOrder.price -= info_item[0];
     MyOrder.kcal -= info_item[1];
