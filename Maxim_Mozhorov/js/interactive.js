@@ -1,12 +1,12 @@
 $(".menu-list_burger .btn").click(function () {
     var size = $('.menu-list_burger .burger-type-class input[type=radio]:checked').val();
     var stuffing = $('.menu-list_burger .burger-stuffing-type-class input[type=radio]:checked').val();
-    MyOrder.AddBurger(size, stuffing);
+    var newBurger = new Burger(size, stuffing);
     if(stuffing === ""){
-        $(".order-list ul").append("<li>Гамбургер("+size+") без дополнительных ингридиентов <span data-id='"+(MyOrder.items.length-1)+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
+        $(".order-list ul").append("<li>Гамбургер("+size+") без дополнительных ингридиентов <span data-id='"+(Order.items.length-1)+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
     }
     else {
-        $(".order-list ul").append("<li>Гамбургер("+size+") c "+stuffing+" <span data-id='"+(MyOrder.items.length-1)+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
+        $(".order-list ul").append("<li>Гамбургер("+size+") c "+stuffing+" <span data-id='"+(Order.items.length-1)+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
     }
     ShowTotalPrice();
 
@@ -14,22 +14,22 @@ $(".menu-list_burger .btn").click(function () {
 
 $(".menu-list_salad .btn").click(function () {
     var type = $('.menu-list_salad input[type=radio]:checked').val();
-    MyOrder.AddSalad(type);
-    $(".order-list ul").append("<li>Салат: "+type+" <span data-id='"+(MyOrder.items.length-1)+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
+    var newSalad = new Salad(type);
+    $(".order-list ul").append("<li>Салат: "+type+" <span data-id='"+(Order.items.length-1)+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
     ShowTotalPrice();
 });
 
 $(".menu-list_drink .btn").click(function () {
     var type = $('.menu-list_drink input[type=radio]:checked').val();
-    MyOrder.AddDrink(type);
-    $(".order-list ul").append("<li>Напиток: "+type+" <span data-id='"+(MyOrder.items.length-1)+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
+    var newDrink = new Drink(type);
+    $(".order-list ul").append("<li>Напиток: "+type+" <span data-id='"+(Order.items.length-1)+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
     ShowTotalPrice();
 });
 
 
 
 $( ".order-list ul" ).on("click","li .glyphicon-trash", function(event) {
-    MyOrder.deleteFood($(this).attr("data-id"));
+    Order.deleteItem($(this).attr("data-id"));
     UpdateList();
 });
 
@@ -45,10 +45,11 @@ $('.order-list .btn-info').click(function () {
 
 function UpdateList() {
     ClearVisualList();
-    MyOrder.items.forEach(function (item, i, arr) {
-        if (item.name == "Burger"){
-            var size = item.size;
-            var stuffing = item.stuffing;
+    Order.items.forEach(function (item, i, arr) {
+        console.log(item);
+        if (item['name'] == "Burger"){
+            var size = item['type'];
+            var stuffing = item['stuffing'];
             if(stuffing === ""){
                 $(".order-list ul").append("<li>Гамбургер("+size+") без дополнительных ингридиентов <span data-id='"+i+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
             }
@@ -56,12 +57,12 @@ function UpdateList() {
                 $(".order-list ul").append("<li>Гамбургер("+size+") c "+stuffing+" <span data-id='"+i+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
             }
         }
-        else if (item.name == "Salad"){
-            var type = item.type;
+        else if (item['name'] == "Salad"){
+            var type = item['type'];
             $(".order-list ul").append("<li>Салат: "+type+" <span data-id='"+i+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
         }
-        else if (item.name == "Drink"){
-            var type = item.type;
+        else if (item['name'] == "Drink"){
+            var type = item['type'];
             $(".order-list ul").append("<li>Напиток: "+type+" <span data-id='"+i+"' class='glyphicon glyphicon-trash' aria-hidden='true' style='cursor: pointer'></span></li>");
         }
     });
@@ -74,7 +75,15 @@ function ClearVisualList() {
 }
 
 function ShowTotalPrice() {
-    $(".total-price").html("Итого: "+MyOrder.price + " ("+MyOrder.kcal+" kcal)");
+    if (Order.totalPrice != 0){
+        $(".total-price").html("Итого: "+Order.totalPrice + " ("+Order.totalKcal+" kcal)");
+        $(".total-price").css("display", "block");
+        $(".btn-info").css("display", "block");
+    }
+    else {
+        $(".btn-info").css("display", "none");
+        $(".total-price").css("display", "none");
+    }
 }
 
 function FinishOrder() {
@@ -85,7 +94,7 @@ function FinishOrder() {
         $(this).prop("disabled", true);
     });
 
-    $("ul li").each(function (idx, item) {
+    $("ul li span").each(function (idx, item) {
         $(this).css("display","none");
     });
 
